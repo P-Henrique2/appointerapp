@@ -1,0 +1,21 @@
+{
+  "name": "remindly",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/dashboard",
+    "apps/widget",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev:dashboard": "npm -w apps/dashboard run dev",
+    "dev:widget": "npm -w apps/widget run dev",
+    "build": "npm -w packages/shared run build && npm -w apps/dashboard run build && npm -w apps/widget run build",
+    "lint": "eslint . --ext .ts,.tsx,.js",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "vitest": "^1.6.0"
+  }
+}
