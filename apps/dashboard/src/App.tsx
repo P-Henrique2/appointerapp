@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet, Link, useLocation } fro
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Bell, Calendar, Users, Settings, LogOut, Code, BarChart2 } from "lucide-react";
 import { AuthProvider, useAuth } from "./lib/auth";
-import Auth      from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
+import Auth         from "./pages/Auth";
+import Dashboard    from "./pages/Dashboard";
+import Appointments from "./pages/Appointments";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -107,7 +108,7 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<AppLayout />}>
                 <Route path="/dashboard"     element={<Dashboard />} />
-                <Route path="/appointments"  element={<PlaceholderPage title="Appointments" />} />
+                <Route path="/appointments" element={<Appointments />} />
                 <Route path="/customers"     element={<PlaceholderPage title="Customers" />} />
                 <Route path="/widget"        element={<PlaceholderPage title="Widget setup" />} />
                 <Route path="/settings"      element={<PlaceholderPage title="Settings" />} />
