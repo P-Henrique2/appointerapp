@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from "./lib/auth";
 import Auth         from "./pages/Auth";
 import Dashboard    from "./pages/Dashboard";
 import Appointments from "./pages/Appointments";
+import Customers    from "./pages/Customers";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -109,7 +110,7 @@ export default function App() {
               <Route element={<AppLayout />}>
                 <Route path="/dashboard"     element={<Dashboard />} />
                 <Route path="/appointments" element={<Appointments />} />
-                <Route path="/customers"     element={<PlaceholderPage title="Customers" />} />
+                <Route path="/customers" element={<Customers />} />
                 <Route path="/widget"        element={<PlaceholderPage title="Widget setup" />} />
                 <Route path="/settings"      element={<PlaceholderPage title="Settings" />} />
               </Route>
