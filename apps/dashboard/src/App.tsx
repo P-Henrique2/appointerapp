@@ -1,13 +1,14 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate, Outlet, Link, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Bell, Calendar, Users, Settings, LogOut, Code, BarChart2 } from "lucide-react";
+import { Bell, Calendar, Users, SettingsIcon, LogOut, Code, BarChart2 } from "lucide-react";
 import { AuthProvider, useAuth } from "./lib/auth";
 import Auth         from "./pages/Auth";
 import Dashboard    from "./pages/Dashboard";
 import Appointments from "./pages/Appointments";
 import Customers from "./pages/Customers";
 import Widget    from "./pages/Widget";
+import Settings  from "./pages/Settings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,7 +40,7 @@ const NAV = [
   { href: "/appointments", label: "Appointments",  Icon: Calendar },
   { href: "/customers",   label: "Customers",     Icon: Users },
   { href: "/widget",      label: "Widget",        Icon: Code },
-  { href: "/settings",    label: "Settings",      Icon: Settings },
+  { href: "/settings",    label: "Settings",      Icon: SettingsIcon },
 ];
 
 function AppLayout() {
@@ -113,7 +114,7 @@ export default function App() {
                 <Route path="/appointments" element={<Appointments />} />
                 <Route path="/customers" element={<Customers />} />
                 <Route path="/widget" element={<Widget />} />
-                <Route path="/settings"      element={<PlaceholderPage title="Settings" />} />
+                <Route path="/settings" element={<Settings />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
