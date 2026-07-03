@@ -3,6 +3,7 @@ import { Calendar, Plus, Check, X, Clock, AlertCircle, ChevronRight, Loader2, Ba
 import { format, isToday, isTomorrow, isPast } from "date-fns";
 import { useAuth } from "../lib/auth";
 import type { Appointment } from "../types";
+import { useAppointments } from "../hooks/useAppointments";
 
 function StatusBadge({ status }: { status: Appointment["status"] }) {
   const styles: Record<string, { background: string; color: string }> = {
@@ -40,7 +41,10 @@ function StatCard({ label, value, icon: Icon }: { label: string; value: string |
 
 export default function Dashboard() {
   const { account } = useAuth();
+  const { data: appointments = [] } = useAppointments();
   const now = new Date();
+  const upcoming = appointments.filter(a => new Date(a.starts_at) >= now && a.status !== "cancelled");
+  const todayAppts = appointments.filter(a => isToday(new Date(a.starts_at)));
 
   const planLimits: Record<string, number> = { starter: 100, growth: 400, pro: 9999 };
   const limit    = planLimits[account?.plan ?? "starter"] ?? 100;
@@ -78,9 +82,9 @@ export default function Dashboard() {
       )}
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
-        <StatCard label="This month"   value={thisMonth}  icon={BarChart2} />
-        <StatCard label="Plan limit"   value={limit === 9999 ? "Unlimited" : limit} icon={Clock} />
-        <StatCard label="Plan"         value={account?.plan ?? "starter"} icon={Calendar} />
+        <StatCard label="Today"        value={todayAppts.length} icon={Calendar} />
+        <StatCard label="Upcoming"     value={upcoming.length}   icon={Clock} />
+        <StatCard label="Plan"         value={account?.plan ?? "starter"} icon={BarChart2} />
       </div>
 
       {limit !== 9999 && (
