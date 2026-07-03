@@ -54,7 +54,7 @@ function AppLayout() {
           <div style={{ width: "28px", height: "28px", background: "#0f6e56", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <Bell size={14} color="white" />
           </div>
-          <span style={{ fontWeight: "600", color: "#111", fontSize: "15px" }}>Remindly</span>
+          <span style={{ fontWeight: "600", color: "#111", fontSize: "15px" }}>AppointerApp</span>
         </div>
 
         <div style={{ padding: "12px 20px", borderBottom: "1px solid #f3f4f6" }}>

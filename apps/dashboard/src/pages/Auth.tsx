@@ -51,7 +51,7 @@ export default function Auth() {
           <div style={{ width: "36px", height: "36px", background: "#0f6e56", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Bell size={18} color="white" />
           </div>
-          <span style={{ fontSize: "20px", fontWeight: "600", color: "#111" }}>Remindly</span>
+          <span style={{ fontSize: "20px", fontWeight: "600", color: "#111" }}>AppointerAppy</span>
         </div>
 
         <div style={{ background: "white", borderRadius: "16px", border: "1px solid #e5e7eb", padding: "24px" }}>
