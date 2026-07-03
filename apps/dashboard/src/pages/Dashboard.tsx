@@ -104,8 +104,11 @@ export default function Dashboard() {
         <div style={{ textAlign: "center", padding: "48px 16px" }}>
           <Calendar size={24} color="#d1d5db" style={{ margin: "0 auto 12px" }} />
           <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>No appointments yet</p>
-          <button style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#0f6e56", fontWeight: "500", background: "none", border: "none", cursor: "pointer", marginTop: "8px" }}>
-            Add your first appointment <ChevronRight size={14} />
+          <button
+            onClick={() => setShowNew(true)}
+            style={{ fontSize: "14px", color: "#0f6e56", fontWeight: "500", background: "none", border: "none", cursor: "pointer", marginTop: "8px" }}
+            >
+            Add your first appointment →
           </button>
         </div>
       </div>
