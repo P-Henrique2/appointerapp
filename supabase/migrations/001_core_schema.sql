@@ -1,12 +1,10 @@
-create extension if not exists "uuid-ossp";
-
 create type plan_tier as enum ('starter', 'growth', 'pro');
 create type appointment_status as enum ('scheduled', 'confirmed', 'cancelled', 'no_show', 'completed');
 create type reminder_channel as enum ('sms', 'email', 'both');
 create type reminder_status as enum ('pending', 'sent', 'failed', 'skipped');
 
 create table public.accounts (
-  id            uuid primary key default uuid_generate_v4(),
+  id            uuid primary key default gen_random_uuid(),
   owner_id      uuid not null references auth.users(id) on delete cascade,
   business_name text not null check (char_length(business_name) between 2 and 100),
   timezone      text not null default 'America/New_York',
@@ -22,7 +20,7 @@ create table public.accounts (
 );
 
 create table public.customers (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   account_id  uuid not null references public.accounts(id) on delete cascade,
   name        text not null check (char_length(name) between 1 and 100),
   email       text,
@@ -34,7 +32,7 @@ create table public.customers (
 create index idx_customers_account on public.customers(account_id);
 
 create table public.appointments (
-  id             uuid primary key default uuid_generate_v4(),
+  id             uuid primary key default gen_random_uuid(),
   account_id     uuid not null references public.accounts(id) on delete cascade,
   customer_id    uuid not null references public.customers(id) on delete restrict,
   title          text not null check (char_length(title) between 1 and 200),
@@ -55,7 +53,7 @@ create index idx_appointments_starts_at on public.appointments(starts_at);
 create index idx_appointments_customer on public.appointments(customer_id);
 
 create table public.reminder_logs (
-  id              uuid primary key default uuid_generate_v4(),
+  id              uuid primary key default gen_random_uuid(),
   appointment_id  uuid not null references public.appointments(id) on delete cascade,
   account_id      uuid not null references public.accounts(id) on delete cascade,
   channel         text not null,
@@ -70,7 +68,7 @@ create table public.reminder_logs (
 create index idx_reminder_logs_appointment on public.reminder_logs(appointment_id);
 
 create table public.account_settings (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   account_id  uuid not null references public.accounts(id) on delete cascade unique,
   sms_template_24h  text not null default 'Hi {{name}}, reminder: you have an appointment with {{business}} tomorrow at {{time}}. Reply YES to confirm or NO to cancel.',
   sms_template_2h   text not null default 'Hi {{name}}, your appointment with {{business}} is in 2 hours at {{time}}. See you soon!',
@@ -83,7 +81,7 @@ create table public.account_settings (
 );
 
 create table public.widget_configs (
-  id              uuid primary key default uuid_generate_v4(),
+  id              uuid primary key default gen_random_uuid(),
   account_id      uuid not null references public.accounts(id) on delete cascade unique,
   primary_color   text not null default '#0F6E56',
   button_text     text not null default 'Book an appointment',
