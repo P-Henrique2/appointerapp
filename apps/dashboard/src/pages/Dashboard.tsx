@@ -105,16 +105,33 @@ export default function Dashboard() {
         <div style={{ padding: "16px", borderBottom: "1px solid #f3f4f6" }}>
           <h2 style={{ fontSize: "14px", fontWeight: "600", color: "#111", margin: 0 }}>Appointments</h2>
         </div>
-        <div style={{ textAlign: "center", padding: "48px 16px" }}>
-          <Calendar size={24} color="#d1d5db" style={{ margin: "0 auto 12px" }} />
-          <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>No appointments yet</p>
-          <button
-            onClick={() => setShowNew(true)}
-            style={{ fontSize: "14px", color: "#0f6e56", fontWeight: "500", background: "none", border: "none", cursor: "pointer", marginTop: "8px" }}
-            >
-            Add your first appointment →
-          </button>
-        </div>
+        {upcoming.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "48px 16px" }}>
+            <Calendar size={24} color="#d1d5db" style={{ margin: "0 auto 12px" }} />
+            <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>No upcoming appointments</p>
+            <a href="/appointments" style={{ fontSize: "14px", color: "#0f6e56", fontWeight: "500", textDecoration: "none", display: "inline-block", marginTop: "8px" }}>
+              Add your first appointment →
+            </a>
+          </div>
+        ) : (
+        upcoming.slice(0, 5).map(appt => (
+          <div key={appt.id} style={{ display: "flex", alignItems: "center", gap: "16px", padding: "12px 16px", borderBottom: "1px solid #f9fafb" }}>
+            <div style={{ width: "48px", textAlign: "right", flexShrink: 0 }}>
+              <div style={{ fontSize: "13px", fontWeight: "500", color: isToday(new Date(appt.starts_at)) ? "#0f6e56" : "#111" }}>
+                {isToday(new Date(appt.starts_at)) ? "Today" : format(new Date(appt.starts_at), "MMM d")}
+              </div>
+              <div style={{ fontSize: "12px", color: "#6b7280" }}>{format(new Date(appt.starts_at), "h:mm a")}</div>
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: "13px", fontWeight: "500", color: "#111" }}>{appt.customers?.name ?? "—"}</div>
+              <div style={{ fontSize: "12px", color: "#6b7280" }}>{appt.title}</div>
+            </div>
+            <span style={{ fontSize: "12px", fontWeight: "500", padding: "2px 8px", borderRadius: "20px", background: appt.status === "confirmed" ? "#f0fdf4" : "#eff6ff", color: appt.status === "confirmed" ? "#15803d" : "#1d4ed8" }}>
+              {appt.status}
+            </span>
+          </div>
+        ))
+      )}
       </div>
     </div>
   );
