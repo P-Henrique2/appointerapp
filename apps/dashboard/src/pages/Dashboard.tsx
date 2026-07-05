@@ -69,18 +69,6 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {account?.subscription_status === "trialing" && (
-        <div style={{ marginBottom: "24px", display: "flex", alignItems: "flex-start", gap: "12px", background: "#fffbeb", border: "1px solid #fde68a", borderRadius: "12px", padding: "16px" }}>
-          <AlertCircle size={16} color="#d97706" style={{ marginTop: "2px", flexShrink: 0 }} />
-          <div>
-            <p style={{ fontSize: "14px", fontWeight: "500", color: "#92400e", margin: 0 }}>You're on a free trial</p>
-            <p style={{ fontSize: "13px", color: "#b45309", marginTop: "4px" }}>
-              Trial ends {account.trial_ends_at ? format(new Date(account.trial_ends_at), "MMMM d") : "soon"}. Add billing to keep sending reminders.
-            </p>
-          </div>
-        </div>
-      )}
-
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
         <StatCard label="Today"        value={todayAppts.length} icon={Calendar} />
         <StatCard label="Upcoming"     value={upcoming.length}   icon={Clock} />

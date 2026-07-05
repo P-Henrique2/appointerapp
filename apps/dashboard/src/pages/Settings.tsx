@@ -224,11 +224,7 @@ export default function Settings() {
               Current plan: <span style={{ textTransform: "capitalize" }}>{account?.plan ?? "starter"}</span>
             </p>
             <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#6b7280" }}>
-              {account?.subscription_status === "trialing"
-                ? `Free trial — ends ${account.trial_ends_at ? new Date(account.trial_ends_at).toLocaleDateString("en-US", { month: "long", day: "numeric" }) : "soon"}`
-                : account?.subscription_status === "active"
-                ? "Subscription active"
-                : "No active subscription"}
+              Free plan — unlimited access
             </p>
           </div>
           <span style={{ fontSize: "11px", background: "#f0fdf4", color: "#15803d", padding: "3px 8px", borderRadius: "20px", fontWeight: "500" }}>
