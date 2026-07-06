@@ -61,9 +61,6 @@ function AppLayout() {
           <p style={{ fontSize: "13px", fontWeight: "500", color: "#111", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {account?.business_name}
           </p>
-          <span style={{ fontSize: "11px", background: "#f0fdf4", color: "#15803d", padding: "2px 6px", borderRadius: "4px", fontWeight: "500", marginTop: "4px", display: "inline-block" }}>
-            {account?.plan ?? "starter"}
-          </span>
         </div>
 
         <nav style={{ flex: 1, padding: "12px" }}>

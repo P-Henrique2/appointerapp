@@ -3,7 +3,7 @@ import { Calendar, Plus, Check, X, Clock, AlertCircle, ChevronRight, Loader2, Ba
 import { format, isToday, isTomorrow, isPast } from "date-fns";
 import { useAuth } from "../lib/auth";
 import type { Appointment } from "../types";
-import { useAppointments } from "../hooks/useAppointments";
+import { useAppointments, useCustomers } from "../hooks/useAppointments";
 
 function StatusBadge({ status }: { status: Appointment["status"] }) {
   const styles: Record<string, { background: string; color: string }> = {
@@ -42,6 +42,7 @@ function StatCard({ label, value, icon: Icon }: { label: string; value: string |
 export default function Dashboard() {
   const { account } = useAuth();
   const { data: appointments = [] } = useAppointments();
+  const { data: customers = [] } = useCustomers();
   const now = new Date();
   const upcoming = appointments.filter(a => new Date(a.starts_at) >= now && a.status !== "cancelled");
   const todayAppts = appointments.filter(a => isToday(new Date(a.starts_at)));
@@ -57,7 +58,10 @@ export default function Dashboard() {
             {format(now, "EEEE, MMMM d")}
           </p>
         </div>
-        <button style={{ display: "flex", alignItems: "center", gap: "8px", background: "#0f6e56", color: "white", padding: "8px 16px", borderRadius: "8px", fontSize: "14px", fontWeight: "500", border: "none", cursor: "pointer" }}>
+        <button
+          onClick={() => window.location.href = "/appointments"}
+          style={{ display: "flex", alignItems: "center", gap: "8px", background: "#0f6e56", color: "white", padding: "8px 16px", borderRadius: "8px", fontSize: "14px", fontWeight: "500", border: "none", cursor: "pointer" }}
+        >
           <Plus size={16} />
           New appointment
         </button>
@@ -66,7 +70,7 @@ export default function Dashboard() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
         <StatCard label="Today"        value={todayAppts.length} icon={Calendar} />
         <StatCard label="Upcoming"     value={upcoming.length}   icon={Clock} />
-        <StatCard label="Total customers" value={upcoming.length} icon={Clock} />
+        <StatCard label="Total customers" value={customers.length} icon={Clock} />
       </div>
 
       <div style={{ background: "white", borderRadius: "12px", border: "1px solid #e5e7eb", overflow: "hidden" }}>
