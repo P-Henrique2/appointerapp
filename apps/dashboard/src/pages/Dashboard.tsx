@@ -46,12 +46,6 @@ export default function Dashboard() {
   const upcoming = appointments.filter(a => new Date(a.starts_at) >= now && a.status !== "cancelled");
   const todayAppts = appointments.filter(a => isToday(new Date(a.starts_at)));
 
-  const planLimits: Record<string, number> = { starter: 100, growth: 400, pro: 9999 };
-  const limit    = planLimits[account?.plan ?? "starter"] ?? 100;
-  const thisMonth = account?.appointments_this_month ?? 0;
-  const usagePct  = (thisMonth / limit) * 100;
-  const nearLimit = usagePct >= 80;
-
   return (
     <div style={{ maxWidth: "900px", margin: "0 auto", padding: "32px 16px" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "32px" }}>
@@ -72,22 +66,8 @@ export default function Dashboard() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
         <StatCard label="Today"        value={todayAppts.length} icon={Calendar} />
         <StatCard label="Upcoming"     value={upcoming.length}   icon={Clock} />
-        <StatCard label="Plan"         value={account?.plan ?? "starter"} icon={BarChart2} />
+        <StatCard label="Total customers" value={upcoming.length} icon={Clock} />
       </div>
-
-      {limit !== 9999 && (
-        <div style={{ marginBottom: "24px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
-            <span style={{ fontSize: "12px", color: "#6b7280" }}>Monthly usage</span>
-            <span style={{ fontSize: "12px", fontWeight: "500", color: nearLimit ? "#d97706" : "#374151" }}>
-              {thisMonth} / {limit}
-            </span>
-          </div>
-          <div style={{ height: "6px", background: "#f3f4f6", borderRadius: "99px", overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${Math.min(usagePct, 100)}%`, background: nearLimit ? "#f59e0b" : "#0f6e56", borderRadius: "99px", transition: "width 0.3s" }} />
-          </div>
-        </div>
-      )}
 
       <div style={{ background: "white", borderRadius: "12px", border: "1px solid #e5e7eb", overflow: "hidden" }}>
         <div style={{ padding: "16px", borderBottom: "1px solid #f3f4f6" }}>
