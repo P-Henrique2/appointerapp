@@ -217,20 +217,6 @@ export default function Settings() {
           </div>
         </div>
 
-        {/* Plan info */}
-        <div style={{ background: "#f9fafb", borderRadius: "8px", padding: "12px 14px", marginBottom: "16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div>
-            <p style={{ margin: 0, fontSize: "13px", fontWeight: "500", color: "#111" }}>
-              Current plan: <span style={{ textTransform: "capitalize" }}>{account?.plan ?? "starter"}</span>
-            </p>
-            <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#6b7280" }}>
-              Free plan — unlimited access
-            </p>
-          </div>
-          <span style={{ fontSize: "11px", background: "#f0fdf4", color: "#15803d", padding: "3px 8px", borderRadius: "20px", fontWeight: "500" }}>
-            {account?.appointments_this_month ?? 0} appts this month
-          </span>
-        </div>
 
         <button
           onClick={handleSaveBusiness}
