@@ -115,7 +115,8 @@ function NewAppointmentModal({ onClose }: { onClose: () => void }) {
     if (!title.trim()) { setError("Please enter a title."); return; }
     if (!date || !time) { setError("Please select a date and time."); return; }
 
-    const starts_at = new Date(`${date}T${time}`).toISOString();
+    const localDate = new Date(`${date}T${time}:00`);
+    const starts_at = localDate.toISOString();
 
     try {
       await createAppointment.mutateAsync({
