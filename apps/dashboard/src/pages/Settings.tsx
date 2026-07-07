@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Check, Loader2, Bell, Building2, Mail } from "lucide-react";
+import { Check, Bell, Building2, Mail } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { supabase } from "../lib/supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -29,7 +29,6 @@ function Section({ title, icon: Icon, children }: { title: string; icon: React.E
   );
 }
 
-// ── Hooks ─────────────────────────────────────────────────────────────────────
 function useAccountSettings() {
   const { account } = useAuth();
   const queryClient = useQueryClient();
@@ -82,44 +81,33 @@ function useUpdateAccount() {
   });
 }
 
-// ── Token helper ──────────────────────────────────────────────────────────────
 function TokenHint() {
   return (
     <p style={{ fontSize: "12px", color: "#9ca3af", marginTop: "6px" }}>
-      Available tokens: <code style={{ background: "#f3f4f6", padding: "1px 4px", borderRadius: "4px" }}>{"{{name}}"}</code>{" "}
+      Available tokens:{" "}
+      <code style={{ background: "#f3f4f6", padding: "1px 4px", borderRadius: "4px" }}>{"{{name}}"}</code>{" "}
       <code style={{ background: "#f3f4f6", padding: "1px 4px", borderRadius: "4px" }}>{"{{time}}"}</code>{" "}
       <code style={{ background: "#f3f4f6", padding: "1px 4px", borderRadius: "4px" }}>{"{{business}}"}</code>
     </p>
   );
 }
 
-// ── Main Settings Page ────────────────────────────────────────────────────────
 export default function Settings() {
   const { account } = useAuth();
   const { settings, isLoading, save: saveSettings } = useAccountSettings();
   const updateAccount = useUpdateAccount();
-  const queryClient = useQueryClient();
 
-  // Business info
   const [businessName, setBusinessName] = useState("");
   const [timezone, setTimezone]         = useState("America/New_York");
-
-  // Reminder templates
-  const [sms24h, setSms24h]       = useState("");
-  const [sms2h, setSms2h]         = useState("");
   const [emailSubject, setEmailSubject] = useState("");
-
-  // Notifications
   const [notifyCancel, setNotifyCancel]   = useState(true);
   const [notifyBooking, setNotifyBooking] = useState(true);
   const [notifyEmail, setNotifyEmail]     = useState("");
 
-  // Save states
-  const [savedBiz, setSavedBiz]         = useState(false);
+  const [savedBiz, setSavedBiz]           = useState(false);
   const [savedTemplates, setSavedTemplates] = useState(false);
-  const [savedNotify, setSavedNotify]   = useState(false);
+  const [savedNotify, setSavedNotify]     = useState(false);
 
-  // Sync when data loads
   useEffect(() => {
     if (account) {
       setBusinessName(account.business_name ?? "");
@@ -129,8 +117,6 @@ export default function Settings() {
 
   useEffect(() => {
     if (settings) {
-      setSms24h(settings.sms_template_24h ?? "");
-      setSms2h(settings.sms_template_2h ?? "");
       setEmailSubject(settings.email_subject ?? "");
       setNotifyCancel(settings.notify_on_cancel ?? true);
       setNotifyBooking(settings.notify_on_booking ?? true);
@@ -145,11 +131,7 @@ export default function Settings() {
   }
 
   async function handleSaveTemplates() {
-    await saveSettings.mutateAsync({
-      sms_template_24h: sms24h,
-      sms_template_2h: sms2h,
-      email_subject: emailSubject,
-    });
+    await saveSettings.mutateAsync({ email_subject: emailSubject });
     setSavedTemplates(true);
     setTimeout(() => setSavedTemplates(false), 2000);
   }
@@ -173,17 +155,9 @@ export default function Settings() {
   }
 
   const TIMEZONES = [
-    "America/New_York",
-    "America/Chicago",
-    "America/Denver",
-    "America/Los_Angeles",
-    "America/Sao_Paulo",
-    "Europe/London",
-    "Europe/Paris",
-    "Europe/Berlin",
-    "Asia/Tokyo",
-    "Asia/Sydney",
-    "Australia/Sydney",
+    "America/New_York", "America/Chicago", "America/Denver",
+    "America/Los_Angeles", "America/Sao_Paulo", "Europe/London",
+    "Europe/Paris", "Europe/Berlin", "Asia/Tokyo", "Australia/Sydney",
   ];
 
   return (
@@ -195,17 +169,11 @@ export default function Settings() {
         </p>
       </div>
 
-      {/* ── Business info ── */}
       <Section title="Business info" icon={Building2}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
           <div>
             <label style={lbl}>Business name</label>
-            <input
-              style={inp}
-              value={businessName}
-              onChange={e => setBusinessName(e.target.value)}
-              placeholder="My Business"
-            />
+            <input style={inp} value={businessName} onChange={e => setBusinessName(e.target.value)} placeholder="My Business" />
           </div>
           <div>
             <label style={lbl}>Timezone</label>
@@ -216,8 +184,6 @@ export default function Settings() {
             </select>
           </div>
         </div>
-
-
         <button
           onClick={handleSaveBusiness}
           disabled={updateAccount.isPending}
@@ -227,86 +193,43 @@ export default function Settings() {
         </button>
       </Section>
 
-      {/* ── Reminder templates ── */}
-      <Section title="Reminder message templates" icon={Bell}>
+      <Section title="Email reminder template" icon={Bell}>
         <p style={{ fontSize: "13px", color: "#6b7280", marginBottom: "16px" }}>
-          Customize the messages sent to your customers before their appointments.
+          Customize the email subject line sent to customers before their appointments.
         </p>
-
-        <div style={{ marginBottom: "16px" }}>
-          <label style={lbl}>SMS — 24 hours before</label>
-          <textarea
-            style={{ ...inp, resize: "vertical", minHeight: "72px" }}
-            value={sms24h}
-            onChange={e => setSms24h(e.target.value)}
-          />
-          <TokenHint />
-        </div>
-
-        <div style={{ marginBottom: "16px" }}>
-          <label style={lbl}>SMS — 2 hours before</label>
-          <textarea
-            style={{ ...inp, resize: "vertical", minHeight: "72px" }}
-            value={sms2h}
-            onChange={e => setSms2h(e.target.value)}
-          />
-          <TokenHint />
-        </div>
-
         <div style={{ marginBottom: "16px" }}>
           <label style={lbl}>Email subject line</label>
-          <input
-            style={inp}
-            value={emailSubject}
-            onChange={e => setEmailSubject(e.target.value)}
-            placeholder="Appointment reminder — {{time}}"
-          />
+          <input style={inp} value={emailSubject} onChange={e => setEmailSubject(e.target.value)} placeholder="Appointment reminder — {{time}}" />
           <TokenHint />
         </div>
-
         <button
           onClick={handleSaveTemplates}
           disabled={saveSettings.isPending}
           style={{ background: savedTemplates ? "#15803d" : "#0f6e56", color: "white", border: "none", borderRadius: "8px", padding: "8px 16px", fontSize: "14px", fontWeight: "500", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
         >
-          {savedTemplates ? <><Check size={14} /> Saved!</> : saveSettings.isPending ? "Saving…" : "Save templates"}
+          {savedTemplates ? <><Check size={14} /> Saved!</> : saveSettings.isPending ? "Saving…" : "Save template"}
         </button>
       </Section>
 
-      {/* ── Notifications ── */}
       <Section title="Owner notifications" icon={Mail}>
         <p style={{ fontSize: "13px", color: "#6b7280", marginBottom: "16px" }}>
           Get notified when customers book or cancel through the widget.
         </p>
-
         <div style={{ marginBottom: "14px" }}>
           <label style={lbl}>Notification email</label>
-          <input
-            style={inp}
-            type="email"
-            value={notifyEmail}
-            onChange={e => setNotifyEmail(e.target.value)}
-            placeholder="you@yourbusiness.com"
-          />
+          <input style={inp} type="email" value={notifyEmail} onChange={e => setNotifyEmail(e.target.value)} placeholder="you@yourbusiness.com" />
         </div>
-
         <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px" }}>
           {[
             { label: "Email me when a customer cancels", value: notifyCancel, set: setNotifyCancel },
             { label: "Email me when a customer books via widget", value: notifyBooking, set: setNotifyBooking },
           ].map(({ label, value, set }) => (
             <label key={label} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
-              <input
-                type="checkbox"
-                checked={value}
-                onChange={e => set(e.target.checked)}
-                style={{ width: "16px", height: "16px", accentColor: "#0f6e56", cursor: "pointer" }}
-              />
+              <input type="checkbox" checked={value} onChange={e => set(e.target.checked)} style={{ width: "16px", height: "16px", accentColor: "#0f6e56", cursor: "pointer" }} />
               <span style={{ fontSize: "14px", color: "#374151" }}>{label}</span>
             </label>
           ))}
         </div>
-
         <button
           onClick={handleSaveNotifications}
           disabled={saveSettings.isPending}
