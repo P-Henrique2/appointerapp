@@ -90,4 +90,4 @@ remindly/
 
 ## Author
 
-Made by [Pedro Henrique](https://github.com/P-Henrique2)
+Made by [Pedro Henrique](https://github.com/P-Henrique2) with help of AI
